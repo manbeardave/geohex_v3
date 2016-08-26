@@ -217,11 +217,11 @@ module GeoHex
     	z_loc = self.xy2loc(h_lon, h_lat)
     	z_loc_x = z_loc.lon
     	z_loc_y = z_loc.lat
- 
+      
+
     	max_hsteps = 3**(_level + 2)
     	hsteps = (h_x - h_y).abs
- 
-       
+
       
     
     	if hsteps == max_hsteps
@@ -232,8 +232,8 @@ module GeoHex
         end
     		z_loc_x = -180
       end
-      
 	     
+
       
     	h_code = ""
        
@@ -249,30 +249,29 @@ module GeoHex
     	(0..(_level + 2)).each do |i| 
     	  h_pow = 3**(_level + 2 - i)
         
-    	  if mod_x >= (h_pow/2).ceil 
+    	  if mod_x >= ((h_pow.to_f)/2).ceil 
     	    code3_x[i] =2 
     	    mod_x -= h_pow 
-        elsif mod_x <= -(h_pow/2).ceil 
+        elsif mod_x <= -((h_pow.to_f)/2).ceil 
     	    code3_x[i] =0 
     	    mod_x += h_pow 
         else
     	    code3_x[i] =1 
         end
         
-         
+
         
-    	  if mod_y >= (h_pow/2).ceil
+    	  if mod_y >= ((h_pow.to_f)/2).ceil
     	    code3_y[i] = 2 
     	    mod_y -= h_pow 
-        elsif mod_y <= -(h_pow/2).ceil
+        elsif mod_y <= -((h_pow.to_f)/2).ceil
     	    code3_y[i] = 0 
     	    mod_y += h_pow 
     	  else
     	    code3_y[i] = 1 
         end
-        
-       
       
+
         
     	  if i==2 && (z_loc_x==-180 || z_loc_x>=0) 
     		  if code3_x[0] == 2 && code3_y[0] == 1 && code3_x[1] == code3_y[1] && code3_x[2] == code3_y[2] 
@@ -285,6 +284,7 @@ module GeoHex
         end
       end
       
+
       
        
     	code3_x.each_with_index do |x,i|
@@ -295,10 +295,10 @@ module GeoHex
     	  code3 = ""
       end
       
-       
+
     	h_2 = h_code[3..h_code.length]
-    	h_1 = h_code[0..3]
-    	h_a1 = (h_1.to_i/30).floor
+    	h_1 = h_code[0..2]
+    	h_a1 = (h_1.to_f/30).floor
     	h_a2 = h_1.to_i%30
       
         
