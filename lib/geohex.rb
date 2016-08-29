@@ -314,14 +314,54 @@ module GeoHex
 
       
     end
+    
+    def self.getXYByLocation(lat, lon, _level)
+    	h_size = calcHexSize(_level)
+    	z_xy = loc2xy(lon, lat)
+    	lon_grid = z_xy.x
+    	lat_grid = z_xy.y
+    	unit_x = 6 * h_size
+    	unit_y = 6 * h_size * H_K
+    	h_pos_x = (lon_grid + lat_grid / H_K) / unit_x
+    	h_pos_y = (lat_grid - H_K * lon_grid) / unit_y
+    	h_x_0 = (h_pos_x).floor
+    	h_y_0 = (h_pos_y).floor
+    	h_x_q = h_pos_x - h_x_0;
+    	h_y_q = h_pos_y - h_y_0
+    	h_x = (h_pos_x).round
+    	h_y = (h_pos_y).round
+	
+    	if h_y_q > -h_x_q + 1
+    		if h_y_q < 2 * h_x_q && h_y_q > 0.5 * h_x_q
+    			h_x = h_x_0 + 1
+    			h_y = h_y_0 + 1
+        end
+      elsif h_y_q < -h_x_q + 1
+    		if h_y_q > (2 * h_x_q) - 1 && h_y_q < 0.5 * h_x_q + 0.5
+    			h_x = h_x_0
+    			h_y = h_y_0
+        end
+      end
+	
+    	inner_xy = adjustXY(h_x, h_y, _level)
+    	h_x = inner_xy[:x]
+    	h_y = inner_xy[:y]
+    	
+      {
+        "x": h_x, 
+        "y": h_y 
+      };
+    end
+    
   end
     
   class << Zone
+    
     def loc2xy(_lon,_lat) 
       x=_lon*H_BASE/180 
       y= Math.log(Math.tan((90+_lat)*Math::PI/360)) / (Math::PI / 180 ) 
       y= y * H_BASE / 180 
-      return OpenStruct.new("x"=>x, "y"=>y) 
+      return OpenStruct.new("x" => x, "y" => y) 
     end
     
     def xy2loc(_x,_y) 
@@ -330,5 +370,45 @@ module GeoHex
     lat=180.0/Math::PI*(2.0*Math.atan(Math.exp(lat*Math::PI/180))-Math::PI/2) 
       return OpenStruct.new("lon" => lon,"lat" => lat) 
     end
+    
+    def adjustXY(_x, _y, _level)
+    	x = _x
+    	y = _y
+    	rev = 0
+    	max_hsteps = 3**(_level+2)
+    	hsteps = (x - y).abs
+    	if hsteps == max_hsteps && x>y
+    		tmp = x
+    		x = y
+    		y = tmp
+    		rev = 1
+      elsif hsteps > max_hsteps
+    		dif = hsteps - max_hsteps
+    		dif_x = (dif/2).floor
+    		dif_y = dif - dif_x
+    		edge_x
+    		edge_y
+    		if x > y 
+    			edge_x = x - dif_x
+    			edge_y = y + dif_y
+    			h_xy = edge_x
+    			edge_x = edge_y
+    			edge_y = h_xy
+    			x = edge_x + dif_x
+    			y = edge_y - dif_y
+        elsif y > x
+    			edge_x = x + dif_x
+    			edge_y = y - dif_y
+    			h_xy = edge_x
+    			edge_x = edge_y
+    			edge_y = h_xy
+    			x = edge_x - dif_x
+    			y = edge_y + dif_y
+        end
+      end
+    	
+      { x: x, y: y, rev: rev }
+    end
+    
   end
 end
