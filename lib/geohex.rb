@@ -304,14 +304,8 @@ module GeoHex
         
     	h_code ="#{H_KEY[h_a1]}#{H_KEY[h_a2]}#{h_2}"
 
-    	# if GEOHEX.cache_on
-#         return _zoneCache[h_code]  if !_zoneCache[h_code]
-#
-#         return (_zoneCache[h_code] = new Zone(z_loc_y, z_loc_x, _x, _y, h_code)) 
-#       }else{
-     return GeoHex::Zone.new(z_loc_y, z_loc_x, _x, _y, h_code) 
-#       }
 
+     return GeoHex::Zone.new(z_loc_y, z_loc_x, _x, _y, h_code) 
       
     end
     
@@ -348,9 +342,16 @@ module GeoHex
     	h_y = inner_xy[:y]
     	
       {
-        "x": h_x, 
-        "y": h_y 
+        x: h_x, 
+        y: h_y 
       };
+    end
+    
+    def self.getZoneByLocation(_lat, _lon, _level) 
+    	xy = self.getXYByLocation(_lat, _lon, _level)
+    	zone = self.getZoneByXy(xy[:x], xy[:y], _level)
+    	
+      zone
     end
     
   end
