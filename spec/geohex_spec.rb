@@ -7,7 +7,6 @@ include GeoHex
 
 describe GeoHex do
   before(:all) {
-    
     @test_xy_to_hex = []
     
     CSV.open("#{File.expand_path(File.dirname(__FILE__))}/fixture_getZoneByXY.csv").each do |l|
@@ -23,6 +22,8 @@ describe GeoHex do
     
     test_coord2Hex  = File.read("#{File.expand_path(File.dirname(__FILE__))}/hex_v3.2_test_coord2HEX.json")   
     @test_coord2Hex = JSON.parse(test_coord2Hex)
+    
+   
   }
   
   it "should throw error if parameters is not valid" do
@@ -54,4 +55,13 @@ describe GeoHex do
     end
   end
   
+  it "should return XY from code" do
+    test_code2XY    = File.read("#{File.expand_path(File.dirname(__FILE__))}/hex_v3.2_test_code2XY.json")
+    @test_code2XY   = JSON.parse(test_code2XY)
+    
+    @test_code2XY.each do |v|
+      expect(GeoHex::Zone.getXYByCode(v[0])).to eq({x: v[1], y: v[2]})
+    end
+  end
+    
 end

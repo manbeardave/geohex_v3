@@ -354,6 +354,101 @@ module GeoHex
       zone
     end
     
+    def self.getXYByCode(code)
+    	level = code.length - 2
+    	h_size =  calcHexSize(level)
+    	unit_x = 6 * h_size
+    	unit_y = 6 * h_size * H_K
+    	h_x = 0
+    	h_y = 0
+
+    	h_dec9 = (( H_KEY.index(code[0]) * 30 + H_KEY.index(code[1])).to_s + code[2..-1].to_s)
+      
+      
+
+      
+    	if h_dec9[0].match(/[15]/) && h_dec9[1].match(/[^125]/) && h_dec9[2].match(/[^125]/)
+    	  if h_dec9[0] == 5
+    		  h_dec9 = "7" + h_dec9[1..(h_dec9.length-1)]
+        elsif h_dec9[0] == 1
+    		  h_dec9 = "3" + h_dec9[1..h_dec9.length-1]
+        end
+      end
+
+
+      
+      d9xlen = h_dec9.length
+      state = (level + 3 - d9xlen)
+      if state != 0 
+        (0..state-1).each do |i|
+          h_dec9 = "0" + h_dec9
+          d9xlen += 1
+        end
+      end
+      
+      
+      
+      
+    	h_dec3 = ""
+    	
+      
+      (0..(d9xlen-1)).each do |i|
+    	  h_dec0 = h_dec9[i].to_i.to_s(3)
+
+    	  if !h_dec0 
+    	    h_dec3 += "00"
+        elsif h_dec0.length == 1
+    	    h_dec3 += "0"
+        end
+    	  h_dec3 += h_dec0;
+      end
+      
+      
+
+      
+      
+    	h_decx =[]
+    	h_decy =[]
+	
+      (0..((h_dec3.length/2)-1)).each do |i|
+    	  x = i*2
+        y = i*2+1
+        h_decx[i] = h_dec3[x]
+    	  h_decy[i] = h_dec3[y]
+      end
+      
+
+      
+
+    	(0..level+2).each do |i|
+  	    h_pow = 3**(level+2-i)
+
+  	    if h_decx[i].to_i == 0
+  	        h_x -= h_pow;
+  	    elsif h_decx[i].to_i == 2
+  	        h_x += h_pow;
+        end
+        
+        if h_decy[i].to_i == 0
+  	        h_y -= h_pow
+  	    elsif h_decy[i].to_i == 2
+  	        h_y += h_pow
+        end
+      
+      end
+
+
+      
+    	inner_xy = adjustXY(h_x,h_y,level)
+    	h_x = inner_xy[:x]
+    	h_y = inner_xy[:y]
+	
+    	{
+        "x":h_x, 
+        "y":h_y
+      }
+    end
+    
   end
     
   class << Zone
@@ -387,8 +482,6 @@ module GeoHex
     		dif = hsteps - max_hsteps
     		dif_x = (dif/2).floor
     		dif_y = dif - dif_x
-    		edge_x
-    		edge_y
     		if x > y 
     			edge_x = x - dif_x
     			edge_y = y + dif_y
