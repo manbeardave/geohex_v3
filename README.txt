@@ -37,7 +37,7 @@ http://twitter.com/hal_sk  (ja)
    => '132KpuG' 
    GeoHex::Zone.decode('0dMV')
    => [24.338279000000004,124.1577708779443,7]
-   GeoHexx::Zone.
+   GeoHex::Zone.
 
 ## FEATURES
 
