@@ -8,11 +8,11 @@ http://twitter.com/hal_sk_e  (en)
 http://twitter.com/hal_sk  (ja)
 
   * The GeoHex is a latitude/longitude encoding system invented by sa2da.
-  * GeoHex divides geometry regions into hexagonal grid and set an unique identifier to each grid. It supports only Japan region so far. 
+  * GeoHex divides geometry regions into hexagonal grid and set an unique identifier to each grid.
   * The coding idea is opened under the Creative Commons Attribution 2.1 Japan Lisence. 
-  * GeoHex Documentation: http://github.com/geohex/geohex-docs
+  * GeoHex Documentation: https://sites.google.com/site/geohexdocs/
   * GeoHex Original Wiki(Japanese): http://geogames.net/labs/geohex
-  * GeoHex Demo: http://geogames.net/hex/
+  * GeoHex Demo: http://geohex.net/v3.html
   * Various GeoHex Libraries: http://github.com/geohex/
   
 ## GEOHEX GEM DESCRIPTION
@@ -20,18 +20,24 @@ http://twitter.com/hal_sk  (ja)
   This GeoHex Ruby gem can convert latitude/longitude to GeoHex code each others.
   * Encode from latitude/longitude to GeoHex code to an arbitrary level of precision
   * Decode from GeoHex code to latitude/longitude and level of precision
+  * Return Zone from X,Y + Level
+  * Return XY from L,L + level
+  * Return XY From Code
+  * Return Zone from Code
+  
 
 ## INSTALL
 
-   sudo gem install geohex
+   sudo gem install geohex_v3
 
 ## QUICK START
 
    require 'geohex'
-   GeoHex.encode(35.647401,139.716911,1)
+   GeoHex::Zone.encode(35.647401,139.716911,1)
    => '132KpuG' 
-   GeoHex.decode('0dMV')
+   GeoHex::Zone.decode('0dMV')
    => [24.338279000000004,124.1577708779443,7]
+   GeoHexx::Zone.
 
 ## FEATURES
 

@@ -7,7 +7,7 @@ require 'rubygems'
 require 'ostruct'
 
 module GeoHex
-  VERSION = '2.0.1'
+  VERSION = '3.0.1'
 
   H_KEY = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" 
   H_BASE = 20037508.34 
@@ -206,8 +206,6 @@ module GeoHex
     	h_x = _x
     	h_y = _y
       
-       
-
     	unit_x = 6 * h_size
     	unit_y = 6 * h_size * H_K
 
@@ -218,12 +216,9 @@ module GeoHex
     	z_loc_x = z_loc.lon
     	z_loc_y = z_loc.lat
       
-
     	max_hsteps = 3**(_level + 2)
     	hsteps = (h_x - h_y).abs
 
-      
-    
     	if hsteps == max_hsteps
     		if h_x > h_y
       		tmp = h_x
@@ -232,8 +227,6 @@ module GeoHex
         end
     		z_loc_x = -180
       end
-	     
-
       
     	h_code = ""
        
@@ -243,9 +236,7 @@ module GeoHex
     	code9 = ""
     	mod_x = h_x
     	mod_y = h_y
-      
-       
-
+    
     	(0..(_level + 2)).each do |i| 
     	  h_pow = 3**(_level + 2 - i)
         
@@ -283,10 +274,7 @@ module GeoHex
           end
         end
       end
-      
-
-      
-       
+         
     	code3_x.each_with_index do |x,i|
     	  code3  += "#{code3_x[i]}#{code3_y[i]}"
     	  code9  += code3.to_i(3).to_s
@@ -295,7 +283,6 @@ module GeoHex
     	  code3 = ""
       end
       
-
     	h_2 = h_code[3..h_code.length]
     	h_1 = h_code[0..2]
     	h_a1 = (h_1.to_f/30).floor
@@ -364,9 +351,6 @@ module GeoHex
 
     	h_dec9 = (( H_KEY.index(code[0]) * 30 + H_KEY.index(code[1])).to_s + code[2..-1].to_s)
       
-      
-
-      
     	if h_dec9[0].match(/[15]/) && h_dec9[1].match(/[^125]/) && h_dec9[2].match(/[^125]/)
     	  if h_dec9[0] == 5
     		  h_dec9 = "7" + h_dec9[1..(h_dec9.length-1)]
@@ -375,8 +359,6 @@ module GeoHex
         end
       end
 
-
-      
       d9xlen = h_dec9.length
       state = (level + 3 - d9xlen)
       if state != 0 
@@ -386,12 +368,8 @@ module GeoHex
         end
       end
       
-      
-      
-      
-    	h_dec3 = ""
-    	
-      
+    	h_dec3 = String.new()
+    	      
       (0..(d9xlen-1)).each do |i|
     	  h_dec0 = h_dec9[i].to_i.to_s(3)
 
@@ -402,11 +380,7 @@ module GeoHex
         end
     	  h_dec3 += h_dec0;
       end
-      
-      
 
-      
-      
     	h_decx =[]
     	h_decy =[]
 	
@@ -416,9 +390,6 @@ module GeoHex
         h_decx[i] = h_dec3[x]
     	  h_decy[i] = h_dec3[y]
       end
-      
-
-      
 
     	(0..level+2).each do |i|
   	    h_pow = 3**(level+2-i)
@@ -444,9 +415,17 @@ module GeoHex
     	h_y = inner_xy[:y]
 	
     	{
-        "x":h_x, 
-        "y":h_y
+        x: h_x, 
+        y: h_y
       }
+    end
+    
+    def self.getZoneByCode(code)
+    	xy = getXYByCode(code)
+    	level = code.length - 2
+      zone = getZoneByXy(xy[:x], xy[:y], level)
+      
+      zone
     end
     
   end
