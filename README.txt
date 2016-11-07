@@ -1,6 +1,4 @@
-= geohex
-
-* http://geohex.rubyforge.org/
+* https://rubygems.org/gems/geohex_v3
 
 ## GEOHEX DESCRIPTION
 GeoHex Gem for Ruby (c) 2009 Haruyuki Seki
@@ -28,7 +26,7 @@ http://twitter.com/hal_sk  (ja)
 
 ## INSTALL
 
-   sudo gem install geohex_v3
+   gem install geohex_v3
 
 ## QUICK START
 
