@@ -35,19 +35,26 @@ http://twitter.com/hal_sk  (ja)
    require 'geohex'
    GeoHex::Zone.encode(35.647401,139.716911,1)
    => '132KpuG' 
+   
    GeoHex::Zone.decode('0dMV')
    => [24.338279000000004,124.1577708779443,7]
-   GeoHex::Zone.
+   
+   GeoHex::Zone.getZoneByLocation(33.127120,-117.3274073, 11)
+   => #<GeoHex::Zone:0x007fdbf180aca8
+         @code="PC22751337146",
+         @lat=33.127103696872936,
+         @lon=-117.32741734265892,
+         @x=-250028,
+         @y=789182>
+    
+   GeoHex::Zone.getZoneByCode('PC22751337146')
+   => #<GeoHex::Zone:0x007fce3d8758d0
+         @code="PC22751337146",
+         @lat=33.127103696872936,
+         @lon=-117.32741734265892,
+         @x=-250028,
+         @y=789182>
 
-## FEATURES
-
-   require 'geohex'
-   geohex = GeoHex.new(35.647401,139.716911,1)
-   geohex.code
-   => '132KpuG' 
-   geohex = GeoHex.decode('0dMV')
-   geohex.lat
-   => 24.338279000000004
 
 ## LICENSE
 

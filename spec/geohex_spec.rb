@@ -65,5 +65,14 @@ describe GeoHex do
       expect(zone.lon).to eq(v[2])
     end
   end
+  
+  
+  it "should have consistent results for the readme examples" do    
+    expect(GeoHex::Zone.getZoneByLocation(33.127120,-117.3274073, 11).code).to eq 'PC22751337146'
+    x = GeoHex::Zone.getZoneByCode('PC22751337146')
+    binding.pry
+    expect(x.x).to eq -250028
+    expect(x.y).to eq 789182
+  end
     
 end
